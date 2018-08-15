@@ -7,10 +7,12 @@ module.exports = (sequelize, DataTypes) => {
     return_by: DataTypes.DATE,
     returned_on: DataTypes.DATE
   }, {
-      timestamps: false
+      timestamps: false,
+      underscored: true
   });
   Loan.associate = function(models) {
     // associations can be defined here
+      models.Loan.belongsTo(models.Book)
   };
   return Loan;
 };

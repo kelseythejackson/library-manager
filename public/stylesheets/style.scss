@@ -93,3 +93,20 @@ input[type=text], select {
   margin-left: 10px;
 }
 
+.filter {
+  display: flex;
+  span {
+    margin-right: 4px;
+  }
+
+  &__buttons {
+    margin: 0;
+    display: flex;
+    li {
+      margin-right: 8px;
+    }
+
+  }
+
+}
+
