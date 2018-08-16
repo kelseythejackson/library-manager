@@ -92,4 +92,14 @@ input {
 input[type=text], select {
   margin-left: 10px; }
 
+.filter {
+  display: flex; }
+  .filter span {
+    margin-right: 4px; }
+  .filter__buttons {
+    margin: 0;
+    display: flex; }
+    .filter__buttons li {
+      margin-right: 8px; }
+
 /*# sourceMappingURL=style.css.map */
