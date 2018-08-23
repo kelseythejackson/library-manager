@@ -36,6 +36,8 @@ ul {
   list-style-type: none;
   margin-bottom: 10px;
   line-height: 1.3em; }
+  ul.errors {
+    list-style-type: square; }
 
 nav {
   border-bottom: 2px solid #D8B493; }
@@ -101,5 +103,8 @@ input[type=text], select {
     display: flex; }
     .filter__buttons li {
       margin-right: 8px; }
+
+.errors {
+  color: red; }
 
 /*# sourceMappingURL=style.css.map */
