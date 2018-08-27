@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Book = require('../models').Book;
 const Loan = require('../models').Loan;
+const Patron = require('../models').Patron;
 const Op = require('sequelize').Op;
 
 /* GET users listing. */
@@ -66,7 +67,10 @@ router.get('/new', function(req, res, next) {
 router.get('/:id', function(req, res, next){
     Book.findOne({
         include: [{
-           model: Loan
+           model: Loan,
+           include: [{
+               model: Patron
+           }]
         }],
         where: {
             id: {
@@ -74,10 +78,37 @@ router.get('/:id', function(req, res, next){
             }
         }
     }).then(function(book){
-
         res.render('books/detail', {book: book});
     });
 
+});
+
+router.put('/:id', function(req, res, next) {
+    Book.findById(req.params.id).then(function(book) {
+        if(book) {
+            return book.update(req.body);
+        } else {
+            res.sendStatus(404);
+        }
+    }).then(function(book) {
+        res.redirect(`/books/`);
+    }).catch(function(err) {
+        if(err.name === 'SequelizeValidationError') {
+            let book = Book.build(req.body);
+            book.id = req.params.id;
+            console.log(book.id);
+            console.log(req.params);
+            res.render('books/detail', { 
+                book: book, 
+                title: book.title, 
+                errors: err.errors
+            });
+        } else {
+            throw err;
+        }
+    }).catch(function(err) {
+        res.sendStatus(500);
+    });
 });
 
 module.exports = router;
