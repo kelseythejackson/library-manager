@@ -60,7 +60,8 @@ h2 {
 th {
   border-bottom: 2px solid #D8B493;
   text-align: left;
-  padding: 5px 20px 5px 10px; }
+  padding: 5px 20px 5px 10px;
+  white-space: nowrap; }
 
 tr {
   min-height: 50px; }
@@ -68,7 +69,8 @@ tr {
 tr .button {
   background-color: #4b6a88;
   padding: 4px 8px 5px;
-  font-weight: normal; }
+  font-weight: normal;
+  white-space: nowrap; }
 
 tr .button:hover {
   background-color: #547798; }
@@ -106,5 +108,8 @@ input[type=text], select {
 
 .errors {
   color: red; }
+
+.date {
+  white-space: nowrap; }
 
 /*# sourceMappingURL=style.css.map */

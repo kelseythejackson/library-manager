@@ -3,7 +3,7 @@ extends ../layout
 block content
     h1 Loans
     p
-        a.button(href='new_loan.html') Create New Loan
+        a.button(href='/loans/new') Create New Loan
     div.filter
         span Filters:
         ul.filter__buttons
@@ -29,9 +29,9 @@ block content
                         a(href=`/books/${loan.book_id}`) #{loan.Book.title}
                     td
                         a(href=`/patron/${loan.patron_id}`) #{loan.Patron.first_name} #{loan.Patron.last_name}
-                    td= loan.loaned_on
-                    td= loan.return_by 
-                    td= loan.returned_on
+                    td.date #{moment(loan.loaned_on).format('GGGG-MM-DD')}
+                    td.date  #{moment(loan.return_by ).format('GGGG-MM-DD')}
+                    td.date= loan.returned_on
                     td
                         if !loan.returned_on
                             a.button(href='return_book.html') Return Book
