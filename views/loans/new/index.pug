@@ -22,9 +22,9 @@ block content
         
     p
       label(for='loaned_on') Loaned on:
-      input#loaned_on(type='text', name='loaned_on' value=moment(Date.now()).format('GGGG-MM-DD'))
+      input#loaned_on(type='text', name='loaned_on' value=moment().utc().format('YYYY-MM-DD'))
     p
       label(for='return_by') Return by:
-      input#return_by(type='text', name='return_by' value=moment(Date.now()).add(7, 'day').format('GGGG-MM-DD'))
+      input#return_by(type='text', name='return_by' value=moment().utc().add(7, 'days').format('YYYY-MM-DD'))
     p
       input(type='submit', value='Create New Loan')

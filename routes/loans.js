@@ -34,7 +34,7 @@ router.get('/overdue', function(req, res, next) {
         }
     }).then(function(loans){
         console.log(loans[0]);
-        res.render('loans/index', { loans });
+        res.render('loans/index', { loans, moment });
     })
     
 });
@@ -50,7 +50,7 @@ router.get('/checked-out', function(req, res, next) {
         }
     }).then(function(loans){
         console.log(loans[0]);
-        res.render('loans/index', { loans, title: 'Checked out Loans' });
+        res.render('loans/index', { loans, moment, title: 'Checked out Loans' });
     })
     
 });
@@ -68,6 +68,29 @@ router.get('/new', function(req, res, next){
         });
         })
     });
+});
+
+router.get('/return/:id', function(req, res, next) {
+    Loan.findOne({
+        include: [{
+           model: Patron
+        },{
+            model: Book
+        }],
+        where: {
+            id: {
+                [Op.eq]: req.params.id
+            }
+        }
+    }).then(function(loan) {
+        console.log(loan);
+        res.render('loans/return/index', {
+            loan,
+            return: Loan.build(),
+            moment
+        });
+    });
+    
 });
 
 router.post('/', function(req, res, next) {
@@ -92,6 +115,43 @@ router.post('/', function(req, res, next) {
     }).catch(function(err) {
         res.sendStatus(500)
     })
+});
+
+router.put('/return/:id', function(req, res, next) {
+    Loan.findById(req.params.id).then(function(loan) {
+        if (loan) {
+            return loan.update(req.body);
+        } else {
+            res.sendStatus(404)
+        }
+    }).then(function() {
+        res.redirect('/loans/');
+    }).catch(function(err){
+        if(err.name === 'SequelizeValidationError') {
+            Loan.findOne({
+                include: [{
+                   model: Patron
+                },{
+                    model: Book
+                }],
+                where: {
+                    id: {
+                        [Op.eq]: req.params.id
+                    }
+                }
+            }).then(function(loan) {
+                res.render('loans/return/index', {
+                    loan,
+                    return: Loan.build(req.body),
+                    moment,
+                    errors: err.errors
+                });
+            });
+            
+        }
+    }).catch(function(err){
+
+    });
 });
 
 
