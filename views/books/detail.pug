@@ -40,9 +40,9 @@ block content
                             a(href=`/books/${book.id}`)= book.title
                         td
                             a(href=`/patrons/${loan.Patron.id}`) #{loan.Patron.first_name} #{loan.Patron.first_name}
-                        td= loan.loaned_on
-                        td= loan.return_by
+                        td.date #{moment(loan.loaned_on).utc().format('YYYY-MM-DD')}
+                        td.date #{moment(loan.return_by).utc().format('YYYY-MM-DD')}
                         td
                         td
                             if !loan.returned_on
-                                a.button(href='return_book.html') Return Book
+                                a.button(href=`/loans/return/${loan.id}`) Return Book

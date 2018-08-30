@@ -4,6 +4,7 @@ const Book = require('../models').Book;
 const Loan = require('../models').Loan;
 const Patron = require('../models').Patron;
 const Op = require('sequelize').Op;
+const moment = require('moment');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -78,7 +79,7 @@ router.get('/:id', function(req, res, next){
             }
         }
     }).then(function(book){
-        res.render('books/detail', {book: book});
+        res.render('books/detail', {book: book, moment});
     });
 
 });
