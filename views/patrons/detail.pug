@@ -1,8 +1,13 @@
 extends ../layout
 
 block content
-  h1 Patron: Andrew Chalkley
-  form(action='', form='post')
+  h1 Patron: #{patron.first_name} #{patron.last_name}
+  if(errors)
+    h2.errors Ooops an error occured!
+    ul.errors
+        each error in errors
+            li=error.message
+  form(action=`/patrons/${patron.id}?_method=PUT`, method='post')
     include form-patron
     p
       input(type='submit', value='Update')
@@ -17,23 +22,16 @@ block content
         th Returned on
         th Action
     tbody
-      tr
-        td
-          a(href='book_detail.html') Harry Potter and the Goblet of Fire
-        td
-          a(href='patron_detail.html') Andrew Chalkley
-        td 2015-12-11
-        td 2015-12-18
-        td
-        td
-          a.button(href='return_book.html') Return Book
-      tr
-        td
-          a(href='book_detail.html') A Brief History of Time
-        td
-          a(href='patron_detail.html') Andrew Chalkley
-        td 2015-12-12
-        td 2015-12-19
-        td
-        td
-          a.button(href='return_book.html') Return Book
+      if patron.Loans
+        each loan in patron.Loans
+          tr
+            td
+              a(href=`/books/${loan.Book.id}`)=loan.Book.title
+            td.name
+              a(href='patron_detail.html') #{patron.first_name} #{patron.last_name}
+            td.date #{moment(loan.loaned_on).utc().format('YYYY-MM-DD')}
+            td.date #{moment(loan.return_by).utc().format('YYYY-MM-DD')}
+            td.date #{loan.returned_on ? moment(loan.returned_on).utc().format('YYYY-MM-DD') : null}
+            td
+              if !loan.returned_on
+                a.button(href=`/loans/return/${loan.id}`) Return Book
