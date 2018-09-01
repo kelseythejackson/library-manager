@@ -112,4 +112,7 @@ input[type=text], select {
 .date, .name {
   white-space: nowrap; }
 
+.lib_id {
+  text-transform: uppercase; }
+
 /*# sourceMappingURL=style.css.map */
