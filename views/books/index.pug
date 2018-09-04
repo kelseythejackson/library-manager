@@ -12,7 +12,16 @@ block content
             li
                 a(href='/books/overdue') Overdue
             li
-                a(href='/books/checked-out') Checked Out
+                a(href='/books/checked-out') Checked Out         
+    if totalPages && totalPages.length > 1               
+        ul.pagination
+            each pageNumber in totalPages
+                li
+                    +paginationUrl(partialUrl, pageNumber)
+    //- form(action=`/books/search/$?_method=PUT` method="get")
+    //-     label(for="#book_search")
+    //-     input#book_search(type="search" placeholder="search by title, author, genre, etc.")    
+    //-     input(type="submit" value="search")                             
     table
         thead
             tr
@@ -28,3 +37,5 @@ block content
                     td= book.author
                     td= book.genre
                     td= book.first_published
+                   
+    

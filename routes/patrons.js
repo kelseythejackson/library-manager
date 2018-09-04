@@ -8,10 +8,36 @@ const moment = require('moment');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-    Patron.findAll().then(function(patrons){
-        res.render('patrons/index', { patrons });
-    })
+    // Patron.findAll().then(function(patrons){
+    //     res.render('patrons/index', { patrons });
+    // })
+    res.redirect('/patrons/page-1');
 });
+
+router.get('/page-:page', function(req, res, next) {
+    Patron.findAndCountAll().then(function(patrons) {
+        let page = req.params.page;
+        let pages = Math.ceil(patrons.count / 5);
+        let offset = 5 * (page - 1);
+        let totalPages = [];
+        for (let i = 1; i <= pages; i++) {
+            totalPages.push(i);
+            
+        }
+        Patron.findAll({
+            limit: 5,
+            offset: offset
+        }).then(function(patrons) {
+            res.render('patrons/index', {
+                page,
+                patrons,
+                pages,
+                totalPages,
+                title: 'Patrons'
+            })
+        })
+    });
+})
 
 router.get('/new', function(req, res, next) {
     res.render('patrons/new/index', { patron: Patron.build()});

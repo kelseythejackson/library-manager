@@ -8,12 +8,41 @@ const moment = require('moment');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-    Book.findAll().then(function(books) {
-
-        res.render('books/index', { books, title: "Books" });
-    });
+    res.redirect('/books/page-1');
 
 });
+
+router.get('/search', function(req, res, next) {
+    res.render('books/search/index', {
+        query_title: req.query.title
+    })
+});
+
+router.get('/page-:page', function(req, res, next) {
+    Book.findAndCountAll().then(function(books) {
+        let page = req.params.page;
+        let pages = Math.ceil(books.count / 5);
+        let offset = 5 * (page - 1);
+        let totalPages = [];
+        for (let i = 1; i <= pages; i++) {
+            totalPages.push(i);
+            
+        }
+        Book.findAll({
+            limit: 5,
+            offset: offset
+        }).then(function(books) {
+            res.render('books/index', {
+                page,
+                books,
+                pages,
+                partialUrl: 'books',
+                totalPages,
+                title: 'Books'
+            })
+        })
+    });
+})
 
 router.post('/', function(req, res, next) {
     Book.create(req.body).then(function(book){
@@ -30,7 +59,12 @@ router.post('/', function(req, res, next) {
 });
 
 router.get('/overdue', function(req, res, next) {
-    Book.findAll({
+    res.redirect('/books/overdue/page-1');
+
+});
+
+router.get('/overdue/page-:page', function(req, res, next) {
+    Book.findAndCountAll({
         include: [{
             model: Loan,
             where: {
@@ -41,25 +75,81 @@ router.get('/overdue', function(req, res, next) {
             }
         }]
     }).then(function(books) {
-        res.render('books/index', { books, title: "Overdue Books" });
-    });
+        let page = req.params.page;
+        let pages = Math.ceil(books.count / 10);
+        let offset = 10 * (page - 1);
+        let totalPages = [];
+        for (let i = 1; i <= pages; i++) {
+            totalPages.push(i);
+            
+        }
+
+        Book.findAll({
+            include: [{
+                model: Loan,
+                where: {
+                    returned_on: null,
+                    return_by: {
+                        $lt: new Date()
+                    }
+                }
+            }],
+            limit: 10,
+            offset: offset
+        }).then(function(books) {
+            res.render('books/index', { books,
+                page,
+                pages,
+                totalPages,
+                partialUrl: 'books/overdue',
+                title: "Overdue Books" });
+        });
+    })
+    
+})
+router.get('/checked-out', function(req, res, next) {
+    res.redirect('/books/checked-out/page-1');
 
 });
-router.get('/checked-out', function(req, res, next) {
-    Book.findAll({
+
+router.get('/checked-out/page-:page', function(req, res, next) {
+    Book.findAndCountAll({
         include: [{
             model: Loan,
             where: {
                 returned_on: null,
-
             }
         }]
     }).then(function(books) {
+        let page = req.params.page;
+        let pages = Math.ceil(books.count / 10);
+        let offset = 10 * (page - 1);
+        let totalPages = [];
+        for (let i = 1; i <= pages; i++) {
+            totalPages.push(i);
+            
+        }
 
-        res.render('books/index', { books, title: "Checked Out Books" });
-    });
-
-});
+        Book.findAll({
+            include: [{
+                model: Loan,
+                where: {
+                    returned_on: null,
+                }
+            }],
+            limit: 10,
+            offset: offset
+        }).then(function(books) {
+            res.render('books/index', { books,
+                page,
+                pages,
+                totalPages,
+                partialUrl: 'books/checked-out',
+                title: "Checked Out Books" });
+        });
+    })
+    
+})
 
 router.get('/new', function(req, res, next) {
     res.render('books/new/index', { book: Book.build(), title: "New Book"});
@@ -108,6 +198,12 @@ router.put('/:id', function(req, res, next) {
     }).catch(function(err) {
         res.sendStatus(500);
     });
+});
+
+router.get('/search', function(req, res, next) {
+    res.render('/books/search/index', {
+        query_title: req.query.title
+    })
 });
 
 module.exports = router;

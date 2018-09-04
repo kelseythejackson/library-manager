@@ -4,6 +4,11 @@ block content
     h1 Patrons
     p
         a.button(href='/patrons/new') Create New Patron
+    if totalPages && totalPages.length > 1               
+        ul.pagination
+            each pageNumber in totalPages
+                li
+                    a(href=`/patrons/page-${pageNumber}`, title="title") #{pageNumber}  
     table
         thead
             tr

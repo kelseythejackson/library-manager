@@ -23,7 +23,6 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: {
           msg: 'return by date cannot be empty'
         }
-        
       }
     },
     returned_on: {
