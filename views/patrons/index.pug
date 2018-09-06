@@ -1,7 +1,9 @@
 extends ../layout
 
 block content
-    h1 Patrons
+    .title_and_search
+        h1 Patrons
+        include ./form-search-patron.pug
     p
         a.button(href='/patrons/new') Create New Patron
     if totalPages && totalPages.length > 1               
@@ -9,21 +11,5 @@ block content
             each pageNumber in totalPages
                 li
                     a(href=`/patrons/page-${pageNumber}`, title="title") #{pageNumber}  
-    table
-        thead
-            tr
-                th Name
-                th Address
-                th Email
-                th Library ID
-                th Zip
-        tbody
-            each patron in patrons
-                tr
-                    td
-                        a(href=`/patrons/${patron.id}`) #{patron.first_name} #{patron.last_name}
-                    td= patron.address
-                    td= patron.email
-                    td.lib_id= patron.library_id
-                    td= patron.zip_code
+    include ./patron-list.pug
                 

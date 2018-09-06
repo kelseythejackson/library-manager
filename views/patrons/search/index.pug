@@ -1,0 +1,12 @@
+extends ../../layout
+
+block content
+  .title_and_search
+    h1 Results for "#{query_patron}"
+    include ../form-search-patron.pug
+  p
+    a.button(href='/patrons/new') Create New Patron  
+  if patrons.length === 0
+    div No results found for "#{query_patron}"
+  else  
+    include ../patron-list.pug

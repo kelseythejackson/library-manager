@@ -1,7 +1,12 @@
 extends ../layout
 
 block content
-    h1= title
+    .title_and_search
+        h1= title
+        form.search(action=`/books/search/` method="get")
+            //- label(for="#book_search")
+            input#book_search(type="search", name='term', placeholder="title, author, genre, etc.")    
+            input(type="submit" value="search") 
     p
         a.button(href='/books/new') Create New Book
     div.filter
@@ -18,24 +23,7 @@ block content
             each pageNumber in totalPages
                 li
                     +paginationUrl(partialUrl, pageNumber)
-    //- form(action=`/books/search/$?_method=PUT` method="get")
-    //-     label(for="#book_search")
-    //-     input#book_search(type="search" placeholder="search by title, author, genre, etc.")    
-    //-     input(type="submit" value="search")                             
-    table
-        thead
-            tr
-                th Title
-                th Author
-                th Genre
-                th Year Released
-        tbody
-            each book in books
-                tr
-                    td
-                        a(href=`/books/${book.id}`)= book.title
-                    td= book.author
-                    td= book.genre
-                    td= book.first_published
+                                
+    include ./book-list
                    
     

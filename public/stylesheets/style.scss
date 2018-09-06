@@ -162,4 +162,15 @@ input[type=text], select {
   }
 }
 
+.title_and_search {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
+}
+.search {
+  display: flex;
+  input[type=submit] {
+    margin-left: 0;
+  }
+}

@@ -134,4 +134,14 @@ input[type=text], select {
       display: inline-block;
       padding: 8px 16px; }
 
+.title_and_search {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; }
+
+.search {
+  display: flex; }
+  .search input[type=submit] {
+    margin-left: 0; }
+
 /*# sourceMappingURL=style.css.map */

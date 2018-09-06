@@ -13,23 +13,52 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/search', function(req, res, next) {
-    res.render('books/search/index', {
-        query_title: req.query.title
+    Book.findAll({
+        where: {
+            [Op.or]: [
+             {
+                title: {
+                    [Op.like]: `%${req.query.term}%`
+                }
+             },
+             {
+                author: {
+                    [Op.like]: `%${req.query.term}%`
+                }
+             },
+             {
+                genre: {
+                    [Op.like]: `%${req.query.term}%`
+                }
+             },
+             {
+                first_published: {
+                    [Op.like]: `%${req.query.term}%`
+                }
+             }    
+            ]
+        }
+    }).then(function(books){
+        res.render('books/search/index', {
+            books,
+            query_term: req.query.term    
+        })
     })
+    
 });
 
 router.get('/page-:page', function(req, res, next) {
     Book.findAndCountAll().then(function(books) {
         let page = req.params.page;
-        let pages = Math.ceil(books.count / 5);
-        let offset = 5 * (page - 1);
+        let pages = Math.ceil(books.count / 10);
+        let offset = 10 * (page - 1);
         let totalPages = [];
         for (let i = 1; i <= pages; i++) {
             totalPages.push(i);
             
         }
         Book.findAll({
-            limit: 5,
+            limit: 10,
             offset: offset
         }).then(function(books) {
             res.render('books/index', {
@@ -80,8 +109,7 @@ router.get('/overdue/page-:page', function(req, res, next) {
         let offset = 10 * (page - 1);
         let totalPages = [];
         for (let i = 1; i <= pages; i++) {
-            totalPages.push(i);
-            
+            totalPages.push(i);  
         }
 
         Book.findAll({
