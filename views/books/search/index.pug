@@ -1,0 +1,15 @@
+extends ../../layout
+
+block content
+  .title_and_search
+    h1 Results for "#{query_term}"
+    form.search(action=`/books/search/` method="get")
+      //- label(for="#book_search")
+      input#book_search(type="search", name='term', placeholder="title, author, genre, etc.")    
+      input(type="submit" value="search") 
+  p
+    a.button(href='/books/new') Create New Book    
+  if books.length === 0
+    div No results found for "#{query_term}"
+  else  
+    include ../book-list

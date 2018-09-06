@@ -1,7 +1,12 @@
 extends ../layout
 
 block content
-    h1= title
+    .title_and_search
+        h1= title
+        form.search(action=`/books/search/` method="get")
+            //- label(for="#book_search")
+            input#book_search(type="search", name='term', placeholder="title, author, genre, etc.")    
+            input(type="submit" value="search") 
     p
         a.button(href='/books/new') Create New Book
     div.filter
@@ -12,19 +17,13 @@ block content
             li
                 a(href='/books/overdue') Overdue
             li
-                a(href='/books/checked-out') Checked Out
-    table
-        thead
-            tr
-                th Title
-                th Author
-                th Genre
-                th Year Released
-        tbody
-            each book in books
-                tr
-                    td
-                        a(href=`/books/${book.id}`)= book.title
-                    td= book.author
-                    td= book.genre
-                    td= book.first_published
+                a(href='/books/checked-out') Checked Out         
+    if totalPages && totalPages.length > 1               
+        ul.pagination
+            each pageNumber in totalPages
+                li
+                    +paginationUrl(partialUrl, pageNumber)
+                                
+    include ./book-list
+                   
+    

@@ -8,10 +8,80 @@ const moment = require('moment');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-    Patron.findAll().then(function(patrons){
-        res.render('patrons/index', { patrons });
+    // Patron.findAll().then(function(patrons){
+    //     res.render('patrons/index', { patrons });
+    // })
+    res.redirect('/patrons/page-1');
+});
+
+router.get('/search', function(req, res, next) {
+    Patron.findAll({
+        where: {
+            [Op.or]: [
+                {
+                    first_name: {
+                        [Op.like]: `%${req.query.patron}%`
+                    }
+                },
+                {
+                    last_name: {
+                        [Op.like]: `%${req.query.patron}%`
+                    }
+                },
+                {
+                    address: {
+                        [Op.like]: `%${req.query.patron}%`
+                    }
+                },
+                {
+                    email: {
+                        [Op.like]: `%${req.query.patron}%`
+                    }
+                },
+                {
+                    library_id: {
+                        [Op.like]: `%${req.query.patron}%`
+                    }
+                },
+                {
+                    zip_code: {
+                        [Op.like]: `%${req.query.patron}%`
+                    }
+                }
+            ]
+        }
+    }).then(function(patrons) {
+        res.render('patrons/search/index', {
+            patrons,
+            query_patron: req.query.patron
+        });
     })
 });
+
+router.get('/page-:page', function(req, res, next) {
+    Patron.findAndCountAll().then(function(patrons) {
+        let page = req.params.page;
+        let pages = Math.ceil(patrons.count / 10);
+        let offset = 10 * (page - 1);
+        let totalPages = [];
+        for (let i = 1; i <= pages; i++) {
+            totalPages.push(i);
+            
+        }
+        Patron.findAll({
+            limit: 10,
+            offset: offset
+        }).then(function(patrons) {
+            res.render('patrons/index', {
+                page,
+                patrons,
+                pages,
+                totalPages,
+                title: 'Patrons'
+            })
+        })
+    });
+})
 
 router.get('/new', function(req, res, next) {
     res.render('patrons/new/index', { patron: Patron.build()});

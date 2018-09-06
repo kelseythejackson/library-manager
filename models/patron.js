@@ -30,6 +30,10 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notEmpty: {
           msg: 'email is required'
+        },
+        isEmail: {
+          args: [true],
+          msg: 'must be an email'
         }
       }
     },
@@ -38,6 +42,10 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notEmpty: {
           msg: 'Library is required'
+        },
+        len: {
+          args: [7],
+          msg: 'ID must be 7 characters'
         }
       }
     },
@@ -46,6 +54,10 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notEmpty: {
           msg: 'Zip Code is required'
+        },
+        not: {
+          args: ["[a-z]",'i'],
+          msg: 'zip-code can only be letters'
         }
       }
     }
