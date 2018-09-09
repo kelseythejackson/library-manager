@@ -33,8 +33,13 @@ module.exports = (sequelize, DataTypes) => {
     first_published: {
       type: DataTypes.INTEGER,
       validate: {
-        isDate: {
-          msg: "Date published is can only be the year (YYYY)"
+        not: {
+          args: ["[a-z]",'i'],
+          msg: 'Only Numeric characters allowed'
+        },
+        len: {
+          args: [0, 4],
+          msg: "The date can be 4 numbers max"
         }
       }
       

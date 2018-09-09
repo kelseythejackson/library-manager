@@ -28,7 +28,7 @@ block content
             td
               a(href=`/books/${loan.Book.id}`)=loan.Book.title
             td.name
-              a(href='patron_detail.html') #{patron.first_name} #{patron.last_name}
+              a(href=`/patrons/${patron.id}`) #{patron.first_name} #{patron.last_name}
             td.date #{moment(loan.loaned_on).utc().format('YYYY-MM-DD')}
             td.date #{moment(loan.return_by).utc().format('YYYY-MM-DD')}
             td.date #{loan.returned_on ? moment(loan.returned_on).utc().format('YYYY-MM-DD') : null}

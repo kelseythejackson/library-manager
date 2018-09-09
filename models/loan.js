@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       validate: {
         isDate: {
-          msg: "Date published is can only be the year (YYYY-MM-DD)"
+          msg: "Return by date can only be the year (YYYY-MM-DD)"
         },
         notEmpty: {
           msg: 'return by date cannot be empty'
@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'returned on date cannot be empty'
         },
         isDate: {
-          msg: "Date published is can only be the year (YYYY-MM-DD)"
+          msg: "Returned on date can only be the year (YYYY-MM-DD)"
         }
       }
     }
